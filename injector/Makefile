@@ -17,7 +17,7 @@ DUMMY=0
 
 SOURCES=$(wildcard *.cu)
 OBJECTS=$(SOURCES:.cu=.o)
-ARCH=35
+ARCH=53
 
 NVBIT_TOOL=injector.so
 
