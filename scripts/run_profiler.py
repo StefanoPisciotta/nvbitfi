@@ -25,23 +25,36 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-
 import os, sys
+import shutil
+
 import params as p
-import common_functions as cf 
+import common_functions as cf
 
 
 ###############################################################################
 # Starting point of the execution
 ###############################################################################
-def main(): 
-	for app in p.apps: 
-	 	print (app)
-	 	os.system("mkdir -p " + p.app_log_dir[app])
-	 	cf.set_env(app, True) # is profiler run
-	 	cmd = "cd " + p.script_dir[app] + ";./" + p.run_script + " " + p.apps[app][4] + "; mv " + p.inj_run_log + " " + p.app_log_dir[app] + p.nvbit_profile_log  + ";cd -;"
-	 	print ("-" + cmd + "-")
-	 	os.system(cmd)
+def main():
+    for app in p.apps:
+        print(app)
+        if len(sys.argv) >= 2:
+            if sys.argv[1] == "clean":
+                if os.path.isdir(p.app_log_dir[app]):
+                    shutil.rmtree(p.app_log_dir[app])
+                else:
+                    print("no directory exist\n")
+            else:
+                print("WRONG ARGUMENT")
+        print("creo la cartella di log\n")
+        os.system("mkdir -p " + p.app_log_dir[app])
+
+        cf.set_env(app, True)  # is profiler run
+        cmd = "cd " + p.script_dir[app] + ";./" + p.run_script + " " + p.apps[app][4] + "; mv " + p.inj_run_log + " " + \
+              p.app_log_dir[app] + p.nvbit_profile_log + ";cd -;"
+        print("-" + cmd + "-")
+        os.system(cmd)
+
 
 if __name__ == "__main__":
     main()
