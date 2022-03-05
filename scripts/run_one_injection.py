@@ -154,6 +154,9 @@ def get_inj_info():
 def classify_injection(app, igid, kname, kcount, iid, opid, bid, retcode, dmesg_delta):
 	[found_line, found_error, found_skip] = [False, False, False]
 
+	
+
+
 	stdout_str = "" 
 	if os.path.isfile(stdout_fname): 
 		stdout_str = str(open(stdout_fname).read())
@@ -282,6 +285,8 @@ def run_one_injection_job(inj_mode, igid, bfm, app, kname, kcount, iid, opid, bi
 	if p.verbose: print (cmd)
 	pr = subprocess.Popen(cmd, shell=True, executable='/bin/bash', preexec_fn=os.setsid) # run the injection job
 
+
+
 	[timeout_flag, retcode] = is_timeout(app, pr)
 	if p.verbose: print ("App runtime: " + str(get_seconds(datetime.datetime.now() - start_main)))
 
@@ -298,8 +303,24 @@ def run_one_injection_job(inj_mode, igid, bfm, app, kname, kcount, iid, opid, bi
 		ret_cat = p.TIMEOUT 
 	else:
 		[value_str, pc, inst_type, tid, injBID] = get_inj_info()
-		ret_cat = classify_injection(app, igid, kname, kcount, iid, opid, bid, retcode, dmesg_delta)
-	
+
+	personal_info=open(new_directory + "/personal_info.txt","w")
+	if os.path.isfile(stdout_fname):
+		stdout_file = open(stdout_fname, "r")
+		lines = stdout_file.readlines()
+		stdout_file.close()
+		stdout_file=open(stdout_fname,"w")
+
+		for line in lines:
+			if "OPCODE" in line or "MASK" in line or "afterVal" in line or "beforeVal" in line or "regNumber" in line or "threadId" in line or "pcOffset" in line:
+				personal_info.write(line)
+			else:
+				stdout_file.write(line)
+		stdout_file.close()
+        
+	ret_cat = classify_injection(app, igid, kname, kcount, iid, opid, bid, retcode, dmesg_delta)
+	personal_info.write("ERROR:"+str(ret_cat))
+	personal_info.close()
 	os.chdir(cwd) # return to the main dir
 	# print (ret_cat)
 
