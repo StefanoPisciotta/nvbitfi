@@ -43,7 +43,6 @@ __device__ unsigned int get_mask(uint32_t bitFlipModel, float bitIDSeed, unsigne
 extern "C" __device__ __noinline__ void inject_error(uint64_t piinfo, uint64_t pcounters, uint64_t pverbose_device, 
 			int offset, int index, int grp_index, int destGPRNum, int regval, 
 			int numDestGPRs, int destPRNum1, int destPRNum2, int maxRegs) {
-
 	inj_info_t* inj_info = (inj_info_t*)piinfo; 
 	uint32_t verbose_device = *((uint32_t *)pverbose_device);
  	uint64_t * counters = (uint64_t *)pcounters;
@@ -131,11 +130,20 @@ extern "C" __device__ __noinline__ void inject_error(uint64_t piinfo, uint64_t p
  					nvbit_write_reg((uint64_t)inj_info->regNo, inj_info->afterVal);
  				}
  				inj_info->opcode = index;  // record the opcode where the injection is performed
+ 				
+
  				inj_info->pcOffset = offset;  // record the pc where the injection is performed (offset from the beginning of the function)
  				inj_info->tid = get_flat_tid(); // record the thread ID where the injection is performed
  				inj_info->errorInjected = true; // perf optimization
  				assert(inj_info->debug[12] == inj_info->opcode);
  				assert(inj_info->debug[13] == inj_info->pcOffset);
+ 				printf("OPCODE:%d\n",inj_info->opcode);
+ 				printf("MASK:%x\n",inj_info->mask);
+ 				printf("afterVal:0x%x\n", inj_info->afterVal);
+ 				printf("beforeVal:0x%x\n", inj_info->beforeVal);
+ 				printf("regNumber:%d\n",inj_info->regNo);
+ 				printf("threadId: %d\n",inj_info->tid );
+ 				printf("pcOffset:0x%x\n",inj_info->pcOffset);
  				if (verbose_device) 
  					printf("done here\n"); 
 			} else {
