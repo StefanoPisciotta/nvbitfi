@@ -83,17 +83,7 @@ printf "\nStep 2: Run the error injection campaign"
 python run_injections.py standalone  # to run the injection campaign on a single machine with single gpu
 
 ################################################
-# Step 3: Parse the results 
+# Step 3: Parse the results
 ################################################
 printf "\nStep 3: Parse results"
 python parse_results.py
-
-
-
-
-
-
-
-
-
-
