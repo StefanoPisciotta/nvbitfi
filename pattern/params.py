@@ -28,7 +28,7 @@ import os, sys
 
 PYTHON_P = "python"
 
-TIMEOUT_THRESHOLD = 0 # 10X usual runtime 
+TIMEOUT_THRESHOLD = 15 # 10X usual runtime 
 
 if 'NVBITFI_HOME' not in os.environ:
 	print ("Error: Please set NVBITFI_HOME environment variable")
@@ -37,6 +37,7 @@ NVBITFI_HOME = os.environ['NVBITFI_HOME']
 DIRECTORY=os.environ['DIRECTORY']
 
 #verbose = True
+
 verbose = False
 
 detectors = True
@@ -63,7 +64,7 @@ keep_logs = True
 # per instruction group (IGID) and bit-flip model (BFM).
 # 
 # NUM_INJECTIONS = 644
-NUM_INJECTIONS = 10000
+NUM_INJECTIONS = 12000
 
 # Specify how many injections you want to perform per IGID and BFM combination. 
 # Only the first THRESHOLD_JOBS will be selected from the generated NUM_INJECTIONS.
